@@ -1097,6 +1097,7 @@ async function run() {
     const gigalixirPassword = core.getInput('GIGALIXIR_PASSWORD', {required: false});
     const migrations = core.getInput('MIGRATIONS', {required: true});
     const sshPrivateKey = core.getInput('SSH_PRIVATE_KEY', {required: JSON.parse(migrations)});
+    const releaseCommands = core.getInput('RELEASE_COMMANDS', {required: false});
 
     await core.group("Installing gigalixir", async () => {
       await exec.exec('pip3 install gigalixir')
@@ -1155,6 +1156,16 @@ async function run() {
 
         core.setFailed(error.message);
       }
+    }
+
+    const parsedCommands = JSON.parse(releaseCommands);
+
+    if (Array.isArray(parsedCommands) && parsedCommands.length) {
+      await core.group("Running release commands", async() => {
+        for (const command of parsedCommands) {
+          await exec.exec(`gigalixir ps:distillery -a ${gigalixirApp} ${command}`)
+        }
+      });
     }
   } catch (error) {
     core.setFailed(error.message);

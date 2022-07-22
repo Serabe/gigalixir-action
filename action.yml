@@ -27,6 +27,10 @@ inputs:
   SSH_PRIVATE_KEY:
     description: 'Your ssh private key that is paired with a public key that is uploaded to Gigalixir'
     required: ${MIGRATIONS}
+  RELEASE_COMMANDS:
+    description: 'A string representation of a JSON list of release commands'
+    required: false
+    default: '[]'
 
 runs:
   using: 'node12'
