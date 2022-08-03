@@ -34,7 +34,7 @@ async function isNextReleaseHealthy(release, app) {
 }
 
 async function waitForNewRelease(oldRelease, app, attempts) {
-  const maxAttempts = 60;
+  const maxAttempts = 100;
 
   if (await isNextReleaseHealthy(oldRelease + 1, app)) {
     return await Promise.resolve(true);
